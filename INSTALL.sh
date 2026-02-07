@@ -60,6 +60,19 @@ else
     exit 1
 fi
 
+# Step 3b: Build custom nvmsgconv library
+echo ""
+echo "Step 3b: Building custom message converter library..."
+cd "$SCRIPT_DIR/src/nvmsg_conv_pose"
+make clean
+make
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}✓ Message converter library built successfully${NC}"
+else
+    echo -e "${RED}ERROR: Failed to build message converter library${NC}"
+    exit 1
+fi
+
 # Step 4: Build modified test5 app
 echo ""
 echo "Step 4: Building modified DeepStream test5 application..."
@@ -105,6 +118,18 @@ sed -i "s|config-file=.*|config-file=$SCRIPT_DIR/configs/config_infer_primary_yo
     "$SCRIPT_DIR/configs/test5_video_output.txt"
 sed -i "s|output-file=.*|output-file=$SCRIPT_DIR/output/pose_output.mp4|" \
     "$SCRIPT_DIR/configs/test5_video_output.txt"
+
+# Update test5 Kafka config
+sed -i "s|config-file=.*|config-file=$SCRIPT_DIR/configs/config_infer_primary_yoloV7_pose.txt|" \
+    "$SCRIPT_DIR/configs/test5_pose_config.txt"
+sed -i "s|msg-conv-config=.*|msg-conv-config=$SCRIPT_DIR/configs/msgconv_config_pose.txt|" \
+    "$SCRIPT_DIR/configs/test5_pose_config.txt"
+
+# Add msg-conv-msg2p-lib if not present
+if ! grep -q "msg-conv-msg2p-lib" "$SCRIPT_DIR/configs/test5_pose_config.txt"; then
+    sed -i "/msg-conv-payload-type=0/a msg-conv-msg2p-lib=$SCRIPT_DIR/src/nvmsg_conv_pose/libnvds_msgconv_pose.so" \
+        "$SCRIPT_DIR/configs/test5_pose_config.txt"
+fi
 
 echo -e "${GREEN}✓ Configuration files updated${NC}"
 

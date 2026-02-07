@@ -3,6 +3,8 @@
 *.so
 *.a
 deepstream-test5-app
+libnvds_msgconv_pose.so
+libnvdsinfer_custom_impl_Yolo_pose.so
 
 # Model files (too large for git)
 models/*.onnx
