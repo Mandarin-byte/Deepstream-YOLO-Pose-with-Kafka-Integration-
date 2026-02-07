@@ -287,6 +287,27 @@ python3 scripts/test_pose_extraction.py
 
 This will show pose keypoint coordinates in console output.
 
+## Acknowledgements
+
+This project builds upon the excellent work of several open-source projects and their contributors:
+
+### DeepStream-Yolo by Marcos Luciano
+- **Repository:** [marcoslucianops/DeepStream-Yolo](https://github.com/marcoslucianops/DeepStream-Yolo)
+- **Contribution:** Custom YOLO parsing implementation for DeepStream, including the foundation for pose model integration
+- **Special Thanks:** The custom parsing library structure and YOLO integration patterns are based on this project
+
+### YOLOv7 by WongKinYiu
+- **Repository:** [WongKinYiu/yolov7](https://github.com/WongKinYiu/yolov7)
+- **Contribution:** YOLOv7-w6-pose model for 17 COCO keypoint pose estimation
+- **License:** GPL-3.0
+
+### NVIDIA DeepStream SDK
+- **Documentation:** [NVIDIA DeepStream Developer Guide](https://docs.nvidia.com/metropolis/deepstream/dev-guide/)
+- **Contribution:** The DeepStream SDK framework and sample applications
+- **License:** NVIDIA Proprietary License
+
+**Note:** This implementation extends the DeepStream test5 sample application with pose visualization capabilities and Kafka integration for message streaming.
+
 ## References
 
 - [NVIDIA DeepStream SDK Documentation](https://docs.nvidia.com/metropolis/deepstream/dev-guide/)
@@ -298,6 +319,7 @@ This will show pose keypoint coordinates in console output.
 This project follows the licensing of its dependencies:
 - DeepStream SDK: NVIDIA License
 - YOLOv7: GPL-3.0 License
+- Custom parsing library: Based on DeepStream-Yolo (MIT License)
 
 ## Support
 
@@ -307,4 +329,4 @@ For issues and questions, refer to:
 
 ## Contributors
 
-Built using NVIDIA DeepStream SDK and YOLOv7-pose model integration.
+Built with contributions from the DeepStream and YOLO community. Special thanks to all the developers who made this integration possible.
