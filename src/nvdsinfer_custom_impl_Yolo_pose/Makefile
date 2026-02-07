@@ -1,6 +1,6 @@
 CUDA_VER?=
 ifeq ($(CUDA_VER),)
-	$(error "CUDA_VER is not set")
+  $(error "CUDA_VER is not set")
 endif
 
 CXX:= g++

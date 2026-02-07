@@ -28,7 +28,7 @@ nvbuf-memory-type=0
 [sink1]
 enable=1
 type=6
-msg-conv-config=msgconv_config_pose.txt
+msg-conv-config=/workspace/DeepStream-Yolo-Pose-Complete/configs/msgconv_config_pose.txt
 msg-conv-payload-type=0
 msg-broker-proto-lib=/opt/nvidia/deepstream/deepstream/lib/libnvds_kafka_proto.so
 msg-broker-conn-str=localhost;9092;deepstream_pose_topic
@@ -64,7 +64,7 @@ bbox-border-color0=1;0;0;1
 interval=0
 gie-unique-id=1
 nvbuf-memory-type=0
-config-file=config_infer_primary_yoloV7_pose.txt
+config-file=/workspace/DeepStream-Yolo-Pose-Complete/configs/config_infer_primary_yoloV7_pose.txt
 
 [tracker]
 enable=0

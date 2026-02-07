@@ -50,9 +50,22 @@ fi
 # Step 3: Build custom parsing library
 echo ""
 echo "Step 3: Building custom pose parsing library..."
+
+# Set CUDA version (auto-detect)
+if [ -d "/usr/local/cuda-12.2" ]; then
+    export CUDA_VER=12.2
+elif [ -d "/usr/local/cuda-12" ]; then
+    export CUDA_VER=12.0
+elif [ -d "/usr/local/cuda-11" ]; then
+    export CUDA_VER=11.0
+else
+    export CUDA_VER=$(ls /usr/local/ | grep -oP 'cuda-\K[0-9.]+' | head -1)
+fi
+echo "Using CUDA version: $CUDA_VER"
+
 cd "$SCRIPT_DIR/src/nvdsinfer_custom_impl_Yolo_pose"
 make clean
-make
+make CUDA_VER=$CUDA_VER
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}✓ Parsing library built successfully${NC}"
 else
@@ -60,18 +73,20 @@ else
     exit 1
 fi
 
-# Step 3b: Build custom nvmsgconv library
+# Step 3b: Build custom nvmsgconv library (SKIPPED FOR NOW - DS 7.0 API incompatibility)
+# echo ""
+# echo "Step 3b: Building custom message converter library..."
+# cd "$SCRIPT_DIR/src/nvmsg_conv_pose"
+# make clean
+# make
+# if [ $? -eq 0 ]; then
+#     echo -e "${GREEN}✓ Message converter library built successfully${NC}"
+# else
+#     echo -e "${RED}ERROR: Failed to build message converter library${NC}"
+#     exit 1
+# fi
 echo ""
-echo "Step 3b: Building custom message converter library..."
-cd "$SCRIPT_DIR/src/nvmsg_conv_pose"
-make clean
-make
-if [ $? -eq 0 ]; then
-    echo -e "${GREEN}✓ Message converter library built successfully${NC}"
-else
-    echo -e "${RED}ERROR: Failed to build message converter library${NC}"
-    exit 1
-fi
+echo "Step 3b: Skipping custom message converter (using default DeepStream msgconv)"
 
 # Step 4: Build modified test5 app
 echo ""
@@ -91,7 +106,7 @@ cp "$SCRIPT_DIR/src/deepstream_test5_app_main.c" \
 # Build
 cd /opt/nvidia/deepstream/deepstream/sources/apps/sample_apps/deepstream-test5
 make clean
-make
+make CUDA_VER=$CUDA_VER
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}✓ Test5 application built successfully${NC}"
 else
@@ -125,11 +140,8 @@ sed -i "s|config-file=.*|config-file=$SCRIPT_DIR/configs/config_infer_primary_yo
 sed -i "s|msg-conv-config=.*|msg-conv-config=$SCRIPT_DIR/configs/msgconv_config_pose.txt|" \
     "$SCRIPT_DIR/configs/test5_pose_config.txt"
 
-# Add msg-conv-msg2p-lib if not present
-if ! grep -q "msg-conv-msg2p-lib" "$SCRIPT_DIR/configs/test5_pose_config.txt"; then
-    sed -i "/msg-conv-payload-type=0/a msg-conv-msg2p-lib=$SCRIPT_DIR/src/nvmsg_conv_pose/libnvds_msgconv_pose.so" \
-        "$SCRIPT_DIR/configs/test5_pose_config.txt"
-fi
+# Remove msg-conv-msg2p-lib if present (using default DeepStream msgconv for now)
+sed -i "/msg-conv-msg2p-lib/d" "$SCRIPT_DIR/configs/test5_pose_config.txt" 2>/dev/null || true
 
 echo -e "${GREEN}✓ Configuration files updated${NC}"
 

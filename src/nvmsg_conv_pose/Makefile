@@ -11,6 +11,8 @@ TARGET_LIB:= libnvds_msgconv_pose.so
 CFLAGS:= -fPIC -std=c++14
 
 CFLAGS+= -I/opt/nvidia/deepstream/deepstream/sources/includes \
+         -I/opt/nvidia/deepstream/deepstream-7.0/sources/libs/nvmsgconv \
+         -I/opt/nvidia/deepstream/deepstream-7.0/sources/libs/nvmsgconv/deepstream_schema \
          -I/usr/local/cuda/include
 
 CFLAGS+= `pkg-config --cflags glib-2.0 json-glib-1.0 uuid`
