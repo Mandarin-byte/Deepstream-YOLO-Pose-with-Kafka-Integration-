@@ -1,0 +1,42 @@
+# Build artifacts
+*.o
+*.so
+*.a
+deepstream-test5-app
+
+# Model files (too large for git)
+models/*.onnx
+models/*.engine
+models/*.trt
+
+# TensorRT cache
+*.engine
+*.trt
+*.plan
+
+# Output files
+output/*.mp4
+output/*.avi
+output/*.jpg
+output/*.png
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# System
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

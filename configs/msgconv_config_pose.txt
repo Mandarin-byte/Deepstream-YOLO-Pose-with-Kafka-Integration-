@@ -1,0 +1,30 @@
+################################################################################
+# DeepStream Message Converter Configuration for Pose Estimation
+# This file configures sensor, place, and analytics module metadata
+################################################################################
+
+[sensor0]
+enable=1
+type=Camera
+id=pose-camera-001
+location=0.0;0.0;0.0
+description=Pose Estimation Camera
+coordinate=0.0;0.0;0.0
+
+[place0]
+enable=1
+id=0
+type=building/entrance
+name=Main Entrance
+location=0.0;0.0;0.0
+coordinate=0.0;0.0;0.0
+place-sub-field1=Area-A
+place-sub-field2=Zone-1
+place-sub-field3=Location-001
+
+[analytics0]
+enable=1
+id=pose-analytics-001
+description=YOLOv7 Pose Estimation with 17 COCO Keypoints
+source=DeepStream-YOLOv7-Pose
+version=1.0
